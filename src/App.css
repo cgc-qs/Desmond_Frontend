@@ -41,6 +41,13 @@ body {
     text-transform: uppercase
 }
 
+.main-title2 {
+    padding-top: 2rem;
+    font-size: 2rem;
+    font-family: 'Fascinate', cursive;
+    text-transform: uppercase
+}
+
 .main-para {
     font-size: 2.5rem;
     text-Transform: capitalize
@@ -62,12 +69,12 @@ body {
 }
 
 #reg_btn:hover span {
-  padding-right: 25px;
+    padding-right: 25px;
 }
 
 #reg_btn:hover span:after {
-  opacity: 1;
-  right: 0;
+    opacity: 1;
+    right: 0;
 }
 
 /***    Login Page     ***/
