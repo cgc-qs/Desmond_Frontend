@@ -6,23 +6,28 @@ import LoginPage from './components/pages/LoginPage'
 import RegisterPage from './components/pages/RegisterPage'
 import ForgetPasswordPage from './components/pages/ForgetPasswordPage'
 import HomePage from './components/pages/HomePage'
+import { UrlProvider } from './components/URLContext'
 
 import './App.css'
 
 export default function App() {
+    const baseURL = "http://localhost:8080";
     return (
-        <Router>
-            <div>
-                <Switch>
-                    <Route exact path="/" component={LandingPage} />
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/register" component={RegisterPage} />
-                    <Route path="/forget-password" component={ForgetPasswordPage} />
-                    <Route path="/home" component={HomePage} />
-                </Switch>
-                <Footer />
-            </div>
-        </Router>
+        <UrlProvider value={baseURL}>
+            <Router>
+                <div>
+                    <Switch>
+                        <Route exact path="/" component={LandingPage} />
+                        <Route path="/login" component={LoginPage} />
+                        <Route path="/register" component={RegisterPage} />
+                        <Route path="/forget-password" component={ForgetPasswordPage} />
+                        <Route path="/home" component={HomePage} />
+                    </Switch>
+                    <Footer />
+                </div>
+            </Router >
+        </UrlProvider>
+
     )
 }
 
