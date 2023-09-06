@@ -7,11 +7,14 @@ import BackgroundImage from '../../assets/images/bg.png'
 import urlContext from '../URLContext'
 import axios from 'axios';
 
+import { Redirect } from 'react-router-dom';
+
 
 export default function SignInPage() {
 
-    const [path, setPath] = useState("/login");
     const [formData, setFormData] = useState({ name: "", password: "" });
+    const [msg, setMsg] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const baseURL = React.useContext(urlContext);
 
@@ -22,11 +25,9 @@ export default function SignInPage() {
         return regexExp.test(str);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();  //Stop reloading
+    const handleSubmit = async (event) => {
 
-        // if (formData.name === login_name && formData.password === login_password)
-        //     setPath("/home");
+        event.preventDefault();  //Stop reloading   
 
         var logInfo = "";
         if (checkIfEmail(formData.name)) {
@@ -37,16 +38,38 @@ export default function SignInPage() {
 
 
         let config = {
-            method: 'get',
-            url: `${baseURL}/api/scanner/login?` + logInfo
+            method: 'post',
+            url: `${baseURL}/api/scanner/login?` + logInfo,
+            // headers: {
+            //     'Content-Type': 'application/json',
+            //     'Authorization': 'Bearer ' + accessToken
+            // },
+            // data: data
         };
 
-        axios(config)
+        await axios(config)
             .then((response) => {
-                console.log(response.data);
+
+                if (response.status === 200) {
+                    setIsLoggedIn(true);
+                    let accessToken = response.data.token;
+                    if (accessToken) {
+                        localStorage.setItem('accessToken', accessToken)
+                        //console.log("XXXXX  ", accessToken);
+                    }
+                    else {
+                        localStorage.removeItem('accessToken');
+                    }
+                }
+                else {
+                    setMsg("Invalid UserName or Password");
+                    localStorage.removeItem('accessToken');
+                }
             })
             .catch((error) => {
                 console.log(error);
+                setMsg("Invalid UserName or Password");
+                localStorage.removeItem('accessToken');
             });
 
 
@@ -57,12 +80,17 @@ export default function SignInPage() {
         setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
 
+    if (isLoggedIn) {
+        // Redirect to dashboard if isLoggedIn is true
+        return <Redirect to="/home" />;
+    }
+
     return (
         <header style={HeaderStyle}>
             <div className="text-center ">
                 <div style={{ height: 100 }}></div>
                 <h2>Sign in to us</h2>
-                <form action={path} onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
 
                     <p>
                         <label>Username or email address</label><br />
@@ -78,6 +106,9 @@ export default function SignInPage() {
                     <p>
                         <button id="sub_btn" type="submit" >Login</button>
                     </p>
+                    <div>
+                        <h6 style={{ color: 'red' }}>{msg}</h6>
+                    </div>
 
                 </form>
                 <footer>

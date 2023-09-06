@@ -12,6 +12,7 @@ import './App.css'
 
 export default function App() {
     const baseURL = "http://localhost:8080";
+    localStorage.setItem('accessToken', "");
     return (
         <UrlProvider value={baseURL}>
             <Router>
