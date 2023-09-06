@@ -26,7 +26,9 @@ export default function HomePage() {
             axios(config)
                 .then(function (res) {
                     console.log(res.data);
-                    setAccountInfo(res.data);
+                    var Data = res.data;
+                    modifyTrueFalse_ToString(Data);
+                    setAccountInfo(Data);
                 })
                 .catch(function (err) {
                     console.log('error=', err);
@@ -37,15 +39,21 @@ export default function HomePage() {
             // console.log('timer=', interval);
             clearInterval(interval);
         }
-
     });
+
+    const modifyTrueFalse_ToString = (oldData) => {
+        for (let i = 0; i < oldData.length; i++) {
+            oldData[i]._activeStatus = oldData[i].activeStatus ? "True" : "False";
+        }
+    }
+
     const headername = [
         { id: "brokerName", numeric: false, label: "brokerName" },
         { id: "accountNumber", numeric: false, label: "accountNumber" },
         { id: "currentEquity", numeric: false, label: "currentEquity" },
         { id: "threshold", numeric: false, label: "threshold" },
         { id: "topUpAmount", numeric: false, label: "topUpAmount" },
-        { id: "activeStatus", numeric: false, label: "activeStatus" },
+        { id: "_activeStatus", numeric: false, label: "activeStatus" },
         { id: "totalSwap", numeric: false, label: "totalSwap" },
         { id: "longSwap", numeric: false, label: "longSwap" },
         { id: "shortSwap", numeric: false, label: "shortSwap" },
