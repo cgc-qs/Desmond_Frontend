@@ -17,6 +17,7 @@ import {
 import { withStyles, } from '@material-ui/core/styles'
 // import HighlightedInformation from "./HighlightedInformation"
 import ConfirmationDialog from "./ConfirmationDialog"
+import EditDialog from "./EditDialog"
 
 
 
@@ -122,53 +123,79 @@ function CustomTable(props) {
     GetHeader();
   }, [GetHeader]);
 
-  const [isDeleteTargetDialogOpen, setIsDeleteTargetDialogOpen] = useState(
-    false
-  );
+  const [isDeleteTargetDialogOpen, setIsDeleteTargetDialogOpen] = useState(false);
   const [deleteTargetDialogRow, setDeleteTargetDialogRow] = useState(null);
-  const [isDeleteTargetLoading, setIsDeleteTargetLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const [modifyDialogOpen, setModifyDialogOpen] = useState(false);
+  const [modifyTargetDialogRow, setModifyTargetDialogRow] = useState(null);
 
 
 
   const deleteTarget = useCallback(() => {
     // if (targets.length <= 1)
     //   return;
-    setIsDeleteTargetLoading(true);
+    setIsProcessing(true);
 
     setIsDeleteTargetDialogOpen(false);
-    setIsDeleteTargetLoading(false);
+    setIsProcessing(false);
 
     const newTargets = [...targets];
-    // const index2 = newTargets.findIndex(
-    //   (element) => element.currency === deleteTargetDialogRow.currency && element.keyWord === deleteTargetDialogRow.keyWord && element.relevance === deleteTargetDialogRow.relevance
-    // );
-    // newTargets.splice(index2, 1);
+
     setTargets(newTargets);
 
     SetDeleteRow(true);
   }, [
     setIsDeleteTargetDialogOpen,
-    setIsDeleteTargetLoading,
+    setIsProcessing,
     targets,
     // deleteTargetDialogRow,
     SetDeleteRow,
     setTargets
   ]);
 
+
+
+  const modifyTarget = useCallback(() => {
+    setIsProcessing(true);
+    setModifyDialogOpen(false);
+    setIsProcessing(false);
+    const newTargets = [...targets];
+    setTargets(newTargets);
+    // SetDeleteRow(true);
+  }, [
+    setModifyDialogOpen,
+    setIsProcessing,
+    setTargets,
+    targets
+  ]);
+
+
   const handleDeleteTargetDialogClose = useCallback(() => {
     setIsDeleteTargetDialogOpen(false);
   }, [setIsDeleteTargetDialogOpen]);
 
-  const handleDeleteTargetDialogOpen = useCallback(
-    (row) => {
-
-      if (disabledTable)
-        return;
-
-      setIsDeleteTargetDialogOpen(true);
-      setDeleteTargetDialogRow(row);
-    },
+  const handleDeleteTargetDialogOpen = useCallback((row) => {
+    if (disabledTable)
+      return;
+    setIsDeleteTargetDialogOpen(true);
+    setDeleteTargetDialogRow(row);
+  },
     [setIsDeleteTargetDialogOpen, setDeleteTargetDialogRow, disabledTable]
+  );
+
+
+  const handleModifyDialogClose = useCallback(() => {
+    setModifyDialogOpen(false);
+  }, [setModifyDialogOpen]);
+
+  const handleModifyDialogOpen = useCallback((row) => {
+    if (disabledTable)
+      return;
+    setModifyDialogOpen(true);
+    setModifyTargetDialogRow(row);
+  },
+    [setModifyDialogOpen, setModifyTargetDialogRow, disabledTable]
   );
 
 
@@ -193,7 +220,14 @@ function CustomTable(props) {
         }
         onClose={handleDeleteTargetDialogClose}
         onConfirm={deleteTarget}
-        loading={isDeleteTargetLoading}
+        loading={isProcessing}
+      />
+      <EditDialog
+        open={modifyDialogOpen}
+        title="Modification"
+        onClose={handleModifyDialogClose}
+        onConfirm={modifyTarget}
+        loading={isProcessing}
       />
       <Box width="100%">
         <div className={classes.tableWrapper}>
@@ -258,7 +292,7 @@ function CustomTable(props) {
                                     <IconButton
                                       className={classes.iconButton}
                                       onClick={() => {
-                                        handleDeleteTargetDialogOpen(row);
+                                        handleModifyDialogOpen(row);
                                       }}
                                       aria-label="Delete"
                                     >
