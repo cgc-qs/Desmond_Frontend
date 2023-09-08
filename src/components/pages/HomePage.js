@@ -31,34 +31,56 @@ export default function HomePage() {
                 .catch(function (err) {
                     console.log('error=', err);
                 });
-
-
-
         }
         // eslint-disable-next-line
     }, [isModified]);
+
+    const AlertProcess = (Data) => {
+        if (activeTradeID === 0)
+            return;
+        const accessToken = window.localStorage.getItem('accessToken');
+        var config = {
+            method: 'post',
+            url: `${baseURL}/api/scanner/alert/${activeTradeID}`,
+            headers: { 'Authorization': accessToken }
+        };
+        axios(config)
+            .then(function (res) {
+                console.log(res.data);
+            })
+            .catch(function (err) {
+                console.log('error=', err);
+            });
+
+    }
+
     useEffect(() => {
 
         const timer = window.localStorage.getItem('timer');
         clearInterval(timer);
-        const interval = setInterval(() => {
+        const interval = setInterval(async () => {
             const accessToken = window.localStorage.getItem('accessToken');
-
             var config = {
                 method: 'get',
                 url: `${baseURL}/api/scanner/?brokerName=&accountNumber=`,
                 headers: { 'Authorization': accessToken }
             };
-            axios(config)
+            var Data;
+            var check = false;
+            await axios(config)
                 .then(function (res) {
                     //console.log(res.data);
-                    var Data = res.data;
+                    Data = res.data;
                     modifyTrueFalse_ToString(Data);
                     setAccountInfo(Data);
+                    check = true;
                 })
                 .catch(function (err) {
                     console.log('error=', err);
                 });
+            if (check)
+                AlertProcess(Data);
+
         }, 1000);
         localStorage.setItem('timer', interval);
         return () => {
