@@ -16,7 +16,7 @@ function ConfirmationDialog(props) {
     <Dialog
       open={open}
       onClose={onClose}
-      disableBackdropClick={loading}
+      // disableBackdropClick={loading}
       disableEscapeKeyDown={loading}
     >
       <DialogTitle>{title}</DialogTitle>

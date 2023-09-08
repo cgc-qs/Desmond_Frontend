@@ -91,7 +91,7 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 function CustomTable(props) {
-  const { classes, targets, setTargets, headername, disabledTable, activeName, setActiveName, SetDeleteRow } = props;
+  const { classes, targets, setTargets, headername, disabledTable, activeName, setActiveName, setIsDeleteRow, setIsModified, setChangeData } = props;
 
   // console.log("disabled111=", disabled);
   const [columns, setcolumns] = useState([]);
@@ -128,7 +128,7 @@ function CustomTable(props) {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [modifyDialogOpen, setModifyDialogOpen] = useState(false);
-  const [modifyTargetDialogRow, setModifyTargetDialogRow] = useState(null);
+  const [selectedData, setSelectedData] = useState({});
 
 
 
@@ -144,13 +144,13 @@ function CustomTable(props) {
 
     setTargets(newTargets);
 
-    SetDeleteRow(true);
+    setIsDeleteRow(true);
   }, [
     setIsDeleteTargetDialogOpen,
     setIsProcessing,
     targets,
     // deleteTargetDialogRow,
-    SetDeleteRow,
+    setIsDeleteRow,
     setTargets
   ]);
 
@@ -162,7 +162,6 @@ function CustomTable(props) {
     setIsProcessing(false);
     const newTargets = [...targets];
     setTargets(newTargets);
-    // SetDeleteRow(true);
   }, [
     setModifyDialogOpen,
     setIsProcessing,
@@ -193,14 +192,14 @@ function CustomTable(props) {
     if (disabledTable)
       return;
     setModifyDialogOpen(true);
-    setModifyTargetDialogRow(row);
-  },
-    [setModifyDialogOpen, setModifyTargetDialogRow, disabledTable]
-  );
 
+  },
+    [setModifyDialogOpen, disabledTable]
+  );
 
   const handleActiveIndex = (event, row) => {
     setActiveName(row.id);
+    setSelectedData(row);
   }
 
   return (
@@ -223,11 +222,14 @@ function CustomTable(props) {
         loading={isProcessing}
       />
       <EditDialog
+        originalData={selectedData}
         open={modifyDialogOpen}
         title="Modification"
         onClose={handleModifyDialogClose}
         onConfirm={modifyTarget}
         loading={isProcessing}
+        setModificationData={setChangeData}
+        setIsModified={setIsModified}
       />
       <Box width="100%">
         <div className={classes.tableWrapper}>
@@ -325,8 +327,8 @@ function CustomTable(props) {
             count={targets.length}
             rowsPerPage={rowsPerPage}
             page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </div>
       </Box >

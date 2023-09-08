@@ -10,7 +10,33 @@ export default function HomePage() {
 
     const baseURL = React.useContext(urlContext);
     const [activeTradeID, setActiveTradeID] = useState(0);
-    const [deleteTradeSettingRow, setDeleteTradeSettingRow] = useState(false);
+    //const [deleteTradeSettingRow, setDeleteTradeSettingRow] = useState(false);
+    const [changeData, setChangeData] = useState({});
+    const [isModified, setIsModified] = useState(false);
+
+    useEffect(() => {
+        if (isModified) {
+            setIsModified(false);
+            const accessToken = window.localStorage.getItem('accessToken');
+            var config = {
+                method: 'post',
+                url: `${baseURL}/api/scanner/update/${activeTradeID}`,
+                headers: { 'Authorization': accessToken },
+                data: changeData
+            };
+            axios(config)
+                .then(function (res) {
+                    console.log(res.data);
+                })
+                .catch(function (err) {
+                    console.log('error=', err);
+                });
+
+
+
+        }
+        // eslint-disable-next-line
+    }, [isModified]);
     useEffect(() => {
 
         const timer = window.localStorage.getItem('timer');
@@ -25,7 +51,7 @@ export default function HomePage() {
             };
             axios(config)
                 .then(function (res) {
-                    console.log(res.data);
+                    //console.log(res.data);
                     var Data = res.data;
                     modifyTrueFalse_ToString(Data);
                     setAccountInfo(Data);
@@ -81,8 +107,8 @@ export default function HomePage() {
                     width: 'calc(90%)', marginRight: 10, padding: 5
                 }}>
                     <InforTable targets={accountInfo} setTargets={setAccountInfo} headername={headername}
-                        activeName={activeTradeID} setActiveName={setActiveTradeID} SetDeleteRow={setDeleteTradeSettingRow}
-                        disabledTable={false} />
+                        activeName={activeTradeID} setActiveName={setActiveTradeID} setChangeData={setChangeData}
+                        setIsModified={setIsModified} disabledTable={false} />
                 </div>
             </div>
         </div>
