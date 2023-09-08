@@ -59,7 +59,7 @@ export default function HomePage() {
                 .catch(function (err) {
                     console.log('error=', err);
                 });
-        }, 2000);
+        }, 1000);
         localStorage.setItem('timer', interval);
         return () => {
             // console.log('timer=', interval);
