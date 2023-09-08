@@ -94,7 +94,7 @@ export default function HomePage() {
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "Space-between" }}>
-                <h1 className="main-title2 home-page-title" style={{ marginLeft: 50 }}>Scanner table</h1>
+                <h1 className="main-title2 home-page-title" style={{ marginLeft: 50 }}>Scan table</h1>
                 <div >
                     <Link to="/">
                         <button className="primary-button" style={{ marginTop: "2rem" }} onClick={signUP}>Log out</button>
