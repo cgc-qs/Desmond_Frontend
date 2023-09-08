@@ -13,6 +13,7 @@ export default function HomePage() {
     //const [deleteTradeSettingRow, setDeleteTradeSettingRow] = useState(false);
     const [changeData, setChangeData] = useState({});
     const [isModified, setIsModified] = useState(false);
+    const [alertInfo, setAlertInfo] = useState([]);
 
     useEffect(() => {
         if (isModified) {
@@ -35,23 +36,73 @@ export default function HomePage() {
         // eslint-disable-next-line
     }, [isModified]);
 
-    const AlertProcess = (Data) => {
-        if (activeTradeID === 0)
-            return;
-        const accessToken = window.localStorage.getItem('accessToken');
-        var config = {
-            method: 'post',
-            url: `${baseURL}/api/scanner/alert/${activeTradeID}`,
-            headers: { 'Authorization': accessToken }
-        };
-        axios(config)
-            .then(function (res) {
-                console.log(res.data);
-            })
-            .catch(function (err) {
-                console.log('error=', err);
-            });
+    const CheckID = (alertData, info) => {
+        for (let i = 0; i < alertData.length; i++) {
+            if (alertData[i].id === info.targetID) {
+                if (alertData[i].checked) {
+                    info.checkedResult = true;
+                    info.checkedIndex = i;
+                    return;
+                }
+                else {
+                    info.checkedResult = false;
+                    info.checkedIndex = i;
+                    return;
+                }
+            }
+        }
+        info.checkedResult = false;
+        info.checkedIndex = -1;
+        return;
+    }
 
+    const AlertProcess = (Data) => {
+        var original = [...alertInfo];
+        // console.log(original);
+        for (let i = 0; i < Data.length; i++) {
+            var ID = Data[i].id;
+            var info = {
+                targetID: ID,
+                checkedResult: false,
+                checkedIndex: -1
+            }
+
+            CheckID(original, info);
+
+            if (Data[i].currentEquity > Data[i].threshold + 1000 && info.checkedResult) {
+                original[info.checkedIndex].checked = false;
+                continue;
+            }
+
+            if (Data[i].currentEquity < Data[i].threshold && (info.checkedIndex < 0 || info.checkedResult === false)) {
+                var newalert = {
+                    id: ID,
+                    checked: true
+                };
+
+                if (info.checkedIndex < 0)
+                    original.push(newalert);
+                else
+                    original[info.checkedIndex].checked = true;
+
+                const accessToken = window.localStorage.getItem('accessToken');
+                var config = {
+                    method: 'post',
+                    url: `${baseURL}/api/scanner/alert/${ID}`,
+                    headers: { 'Authorization': accessToken }
+                };
+                axios(config)
+                    .then(function (res) {
+                        console.log(res.data);
+
+                    })
+                    .catch(function (err) {
+                        console.log('error=', err);
+                    });
+            }
+
+        }
+        setAlertInfo(original);
     }
 
     useEffect(() => {
