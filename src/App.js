@@ -9,7 +9,14 @@ import HomePage from './components/pages/HomePage'
 import { UrlProvider } from './components/URLContext'
 
 import './App.css'
-
+/*
+"scripts": {
+    "start": "react-scripts start",//--openssl-legacy-provider start",
+        "build": "react-scripts build",// --openssl-legacy-provider build",
+            "test": "react-scripts test",
+                "eject": "react-scripts eject"
+},
+*/
 export default function App() {
     const baseURL = "https://urchin-app-zb7p4.ondigitalocean.app";
 
