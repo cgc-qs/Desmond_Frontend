@@ -13,7 +13,7 @@ export default function HomePage() {
     //const [deleteTradeSettingRow, setDeleteTradeSettingRow] = useState(false);
     const [changeData, setChangeData] = useState({});
     const [isModified, setIsModified] = useState(false);
-    const [alertInfo, setAlertInfo] = useState([]);
+   
 
     useEffect(() => {
         if (isModified) {
@@ -36,75 +36,6 @@ export default function HomePage() {
         // eslint-disable-next-line
     }, [isModified]);
 
-    const CheckID = (alertData, info) => {
-        for (let i = 0; i < alertData.length; i++) {
-            if (alertData[i].id === info.targetID) {
-                if (alertData[i].checked) {
-                    info.checkedResult = true;
-                    info.checkedIndex = i;
-                    return;
-                }
-                else {
-                    info.checkedResult = false;
-                    info.checkedIndex = i;
-                    return;
-                }
-            }
-        }
-        info.checkedResult = false;
-        info.checkedIndex = -1;
-        return;
-    }
-
-    const AlertProcess = (Data) => {
-        var original = [...alertInfo];
-        // console.log(original);
-        for (let i = 0; i < Data.length; i++) {
-            var ID = Data[i].id;
-            var info = {
-                targetID: ID,
-                checkedResult: false,
-                checkedIndex: -1
-            }
-
-            CheckID(original, info);
-
-            if (Data[i].currentEquity > Data[i].threshold + 1000 && info.checkedResult) {
-                original[info.checkedIndex].checked = false;
-                continue;
-            }
-
-            if (Data[i].currentEquity < Data[i].threshold && (info.checkedIndex < 0 || info.checkedResult === false)) {
-                var newalert = {
-                    id: ID,
-                    checked: true
-                };
-
-                if (info.checkedIndex < 0)
-                    original.push(newalert);
-                else
-                    original[info.checkedIndex].checked = true;
-
-                const accessToken = window.localStorage.getItem('accessToken');
-                var config = {
-                    method: 'post',
-                    url: `${baseURL}/api/scanner/alert/${ID}`,
-                    headers: { 'Authorization': accessToken }
-                };
-                axios(config)
-                    .then(function (res) {
-                        console.log(res.data);
-
-                    })
-                    .catch(function (err) {
-                        console.log('error=', err);
-                    });
-            }
-
-        }
-        setAlertInfo(original);
-    }
-
     useEffect(() => {
 
         const timer = window.localStorage.getItem('timer');
@@ -117,20 +48,20 @@ export default function HomePage() {
                 headers: { 'Authorization': accessToken }
             };
             var Data;
-            var check = false;
+            // var check = false;
             await axios(config)
                 .then(function (res) {
                     //console.log(res.data);
-                    Data = res.data;
+                     Data = res.data;
                     modifyTrueFalse_ToString(Data);
                     setAccountInfo(Data);
-                    check = true;
+                    // check = true;
                 })
                 .catch(function (err) {
                     console.log('error=', err);
                 });
-            if (check)
-                AlertProcess(Data);
+            // if (check)
+            //     AlertProcess(Data);
 
         }, 1000);
         localStorage.setItem('timer', interval);
@@ -143,6 +74,7 @@ export default function HomePage() {
     const modifyTrueFalse_ToString = (oldData) => {
         for (let i = 0; i < oldData.length; i++) {
             oldData[i]._activeStatus = oldData[i].activeStatus ? "True" : "False";
+            oldData[i]._alertChecked = oldData[i].alertChecked ? "pass" : "wait";
         }
     }
 
@@ -156,7 +88,9 @@ export default function HomePage() {
         { id: "totalSwap", numeric: false, label: "totalSwap" },
         { id: "longSwap", numeric: false, label: "longSwap" },
         { id: "shortSwap", numeric: false, label: "shortSwap" },
+        {id:"_alertChecked", numeric:false, label:"alert pass"},
         { id: "edit", numeric: false, label: " " },
+       
         //{ id: "delete", numeric: false, label: " " },
 
     ];
