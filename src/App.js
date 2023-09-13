@@ -11,7 +11,7 @@ import { UrlProvider } from './components/URLContext'
 import './App.css'
 
 export default function App() {
-    const baseURL = "http://localhost:8080";
+    const baseURL = "https://urchin-app-zb7p4.ondigitalocean.app";
 
     return (
         <UrlProvider value={baseURL}>
