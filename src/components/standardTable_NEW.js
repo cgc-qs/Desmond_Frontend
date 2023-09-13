@@ -270,7 +270,9 @@ function CustomTable(props) {
                             key={column.id}
                             align={column.align}
                             className={classes.tableCellClass}
-                            style={{ width: "auto", color: !disabledTable ? "black" : 'rgba(0, 0, 0, 0.5)' }}
+                            style={{ width: "auto", color: !disabledTable ? 
+                            (value==="True"?"limeGreen":value==="False"?"red":"black") : 
+                            'rgba(0, 0, 0, 0.5)' }}
                           // size="small"
                           // component="th" scope="row"
                           >
