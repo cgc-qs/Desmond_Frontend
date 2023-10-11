@@ -200,7 +200,7 @@ function CustomTable(props) {
   const handleActiveIndex = (event, row) => {
     setActiveName(row.id);
     setSelectedData(row);
-    console.log("=======", row.id);
+    //console.log("=======", row.id);
   }
 
   return (
