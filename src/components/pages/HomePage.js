@@ -13,6 +13,7 @@ export default function HomePage() {
     //const [deleteTradeSettingRow, setDeleteTradeSettingRow] = useState(false);
     const [changeData, setChangeData] = useState({});
     const [isModified, setIsModified] = useState(false);
+    const [isDeleteRow, setIsDeleteRow] = useState(false);
 
 
     useEffect(() => {
@@ -35,6 +36,28 @@ export default function HomePage() {
         }
         // eslint-disable-next-line
     }, [isModified]);
+
+    useEffect(() => {
+        if (isDeleteRow) {
+            setIsDeleteRow(false);
+            const accessToken = "MT_EA_SIGNAL";// window.localStorage.getItem('accessToken');
+            var config = {
+                method: 'post',
+                url: `${baseURL}/api/scanner/delete/${activeTradeID}`,
+                headers: { 'Authorization': accessToken },
+                data: changeData
+            };
+            axios(config)
+                .then(function (res) {
+                    console.log(res.data);
+                })
+                .catch(function (err) {
+                    console.log('error=', err);
+                });
+
+        }
+        // eslint-disable-next-line
+    }, [isDeleteRow]);
 
     useEffect(() => {
 
@@ -75,7 +98,7 @@ export default function HomePage() {
         for (let i = 0; i < oldData.length; i++) {
             oldData[i]._activeStatus = oldData[i].activeStatus ? "True" : "False";
             oldData[i]._alertChecked = oldData[i].alertChecked ? "pass" : "wait";
-
+            oldData[i].bankrollPercent = (oldData[i].currentEquity / oldData[i].topUpAmount).toFixed(4);
         }
     }
 
@@ -83,8 +106,9 @@ export default function HomePage() {
         { id: "brokerName", numeric: false, label: "Broker" },
         { id: "accountNumber", numeric: false, label: "Acc.Num" },
         { id: "currentEquity", numeric: false, label: "Equity" },
+        { id: "bankrollPercent", numeric: false, label: "Bankroll %" },
         // { id: "threshold", numeric: false, label: "threshold" },
-        // { id: "topUpAmount", numeric: false, label: "topUpAmount" },
+        //{ id: "topUpAmount", numeric: false, label: "topUpAmount" },
         // { id: "_activeStatus", numeric: false, label: "activeStatus" },
         // { id: "totalSwap", numeric: false, label: "totalSwap" },
         // { id: "longSwap", numeric: false, label: "longSwap" },
@@ -115,7 +139,7 @@ export default function HomePage() {
                 }}>
                     <InforTable targets={accountInfo} setTargets={setAccountInfo} headername={headername}
                         activeName={activeTradeID} setActiveName={setActiveTradeID} setChangeData={setChangeData}
-                        setIsModified={setIsModified} disabledTable={false} />
+                        setIsModified={setIsModified} disabledTable={false} setIsDeleteRow={setIsDeleteRow} />
                 </div>
             </div>
         </div>

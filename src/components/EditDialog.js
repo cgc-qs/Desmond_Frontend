@@ -59,7 +59,7 @@ function ConfirmationDialog(props) {
             value={_threshold} onChange={(event) => { updateThreshold(event.target.value) }} />
         </div>
         <div style={{ margin: 10, marginLeft: 40, marginRight: 40, display: "flex", justifyContent: "Space-between", width: 300 }}>
-          <h6 style={{ display: "flex", alignItems: "center" }}>ToUp Ampunt :</h6>
+          <h6 style={{ display: "flex", alignItems: "center" }}>Bankroll :</h6>
           <TextField type="number" style={{ width: 180 }} inputProps={{ step: "1", min: 1 }}
             id="ss1" variant="outlined" size="small" disabled={false}
             value={topUP} onChange={(event) => { updateToUp(event.target.value) }} />
