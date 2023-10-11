@@ -263,16 +263,19 @@ function CustomTable(props) {
 
                       {columns.map((column) => {
                         const value = row[column.id];
-                        // console.log(value);
+                        const active = row["_activeStatus"];
                         const headName = column.id;
                         return (
                           <TableCell
                             key={column.id}
                             align={column.align}
                             className={classes.tableCellClass}
-                            style={{ width: "auto", color: !disabledTable ? 
-                            (value==="True"?"limeGreen":value==="False"?"red":"black") : 
-                            'rgba(0, 0, 0, 0.5)' }}
+                            style={{
+                              width: "auto", color: !disabledTable ?
+                                (headName === "brokerName" && active === "True" ? "limeGreen" :
+                                  headName === "brokerName" && active === "False" ? "red" : "black") :
+                                'rgba(0, 0, 0, 0.5)'
+                            }}
                           // size="small"
                           // component="th" scope="row"
                           >

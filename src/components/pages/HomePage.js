@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import urlContext from '../URLContext'
 import axios from 'axios';
 import InforTable from "../standardTable_NEW";
@@ -13,12 +13,12 @@ export default function HomePage() {
     //const [deleteTradeSettingRow, setDeleteTradeSettingRow] = useState(false);
     const [changeData, setChangeData] = useState({});
     const [isModified, setIsModified] = useState(false);
-   
+
 
     useEffect(() => {
         if (isModified) {
             setIsModified(false);
-            const accessToken = window.localStorage.getItem('accessToken');
+            const accessToken = "MT_EA_SIGNAL";// window.localStorage.getItem('accessToken');
             var config = {
                 method: 'post',
                 url: `${baseURL}/api/scanner/update/${activeTradeID}`,
@@ -41,7 +41,7 @@ export default function HomePage() {
         const timer = window.localStorage.getItem('timer');
         clearInterval(timer);
         const interval = setInterval(async () => {
-            const accessToken = window.localStorage.getItem('accessToken');
+            const accessToken = "MT_EA_SIGNAL";// window.localStorage.getItem('accessToken');
             var config = {
                 method: 'get',
                 url: `${baseURL}/api/scanner/?brokerName=&accountNumber=`,
@@ -52,8 +52,8 @@ export default function HomePage() {
             await axios(config)
                 .then(function (res) {
                     //console.log(res.data);
-                     Data = res.data;
-                    modifyTrueFalse_ToString(Data);
+                    Data = res.data;
+                    modifyTableField(Data);
                     setAccountInfo(Data);
                     // check = true;
                 })
@@ -71,42 +71,42 @@ export default function HomePage() {
         }
     });
 
-    const modifyTrueFalse_ToString = (oldData) => {
+    const modifyTableField = (oldData) => {
         for (let i = 0; i < oldData.length; i++) {
             oldData[i]._activeStatus = oldData[i].activeStatus ? "True" : "False";
             oldData[i]._alertChecked = oldData[i].alertChecked ? "pass" : "wait";
+
         }
     }
 
     const headername = [
-        { id: "brokerName", numeric: false, label: "brokerName" },
-        { id: "accountNumber", numeric: false, label: "accountNumber" },
-        { id: "currentEquity", numeric: false, label: "currentEquity" },
-        { id: "threshold", numeric: false, label: "threshold" },
-        { id: "topUpAmount", numeric: false, label: "topUpAmount" },
-        { id: "_activeStatus", numeric: false, label: "activeStatus" },
-        { id: "totalSwap", numeric: false, label: "totalSwap" },
-        { id: "longSwap", numeric: false, label: "longSwap" },
-        { id: "shortSwap", numeric: false, label: "shortSwap" },
-        {id:"_alertChecked", numeric:false, label:"alert pass"},
+        { id: "brokerName", numeric: false, label: "Broker" },
+        { id: "accountNumber", numeric: false, label: "Acc.Num" },
+        { id: "currentEquity", numeric: false, label: "Equity" },
+        // { id: "threshold", numeric: false, label: "threshold" },
+        // { id: "topUpAmount", numeric: false, label: "topUpAmount" },
+        // { id: "_activeStatus", numeric: false, label: "activeStatus" },
+        // { id: "totalSwap", numeric: false, label: "totalSwap" },
+        // { id: "longSwap", numeric: false, label: "longSwap" },
+        //{ id: "shortSwap", numeric: false, label: "shortSwap" },
+        { id: "_alertChecked", numeric: false, label: "alert" },
         { id: "edit", numeric: false, label: " " },
-       
-        //{ id: "delete", numeric: false, label: " " },
+        { id: "delete", numeric: false, label: " " }
 
     ];
 
-    const signUP = () => {
-        localStorage.setItem('accessToken', "");
-    }
+    // const signUP = () => {
+    //     localStorage.setItem('accessToken', "");
+    // }
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "Space-between" }}>
                 <h1 className="main-title2 home-page-title" style={{ marginLeft: 50 }}>Scan table</h1>
-                <div >
+                {/* <div >
                     <Link to="/">
                         <button className="primary-button" style={{ marginTop: "2rem" }} onClick={signUP}>Log out</button>
                     </Link>
-                </div>
+                </div> */}
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
                 <div style={{
