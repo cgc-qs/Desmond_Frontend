@@ -32,7 +32,7 @@ export default function App() {
                         {/* <Route path="/home" component={HomePage} /> */}
                         <Route path="/" component={HomePage} />
                     </Switch>
-                    <Footer />
+                    {/* <Footer /> */}
                 </div>
             </Router >
         </UrlProvider>
@@ -40,22 +40,22 @@ export default function App() {
     )
 }
 
-const Footer = () => {
-    return (
-        <p className="text-center" style={FooterStyle}>version 1.0
-            {/* <a href="https://izemspot.netlify.com" target="_blank" rel="noopener noreferrer">IZEMSPOT</a> */}
-        </p>
-    )
-}
+// const Footer = () => {
+//     return (
+//         <p className="text-center" style={FooterStyle}>version 1.0
+//             {/* <a href="https://izemspot.netlify.com" target="_blank" rel="noopener noreferrer">IZEMSPOT</a> */}
+//         </p>
+//     )
+// }
 
-const FooterStyle = {
-    background: "#222",
-    fontSize: ".8rem",
-    color: "#fff",
-    position: "absolute",
-    bottom: 0,
-    padding: "1rem",
-    margin: 0,
-    width: "100%",
-    opacity: ".5"
-}
+// const FooterStyle = {
+//     background: "#222",
+//     fontSize: ".8rem",
+//     color: "#fff",
+//     position: "absolute",
+//     bottom: 0,
+//     padding: "1rem",
+//     margin: 0,
+//     width: "100%",
+//     opacity: ".5"
+// }

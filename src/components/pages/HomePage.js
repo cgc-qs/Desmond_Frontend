@@ -98,7 +98,7 @@ export default function HomePage() {
         for (let i = 0; i < oldData.length; i++) {
             oldData[i]._activeStatus = oldData[i].activeStatus ? "True" : "False";
             oldData[i]._alertChecked = oldData[i].alertChecked ? "pass" : "wait";
-            oldData[i].bankrollPercent = (oldData[i].currentEquity / oldData[i].topUpAmount).toFixed(4);
+            oldData[i].bankrollPercent = (oldData[i].currentEquity / oldData[i].topUpAmount * 100).toFixed(2);
         }
     }
 
