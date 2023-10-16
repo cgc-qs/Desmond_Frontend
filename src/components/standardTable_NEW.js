@@ -97,7 +97,7 @@ function CustomTable(props) {
   const [columns, setcolumns] = useState([]);
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(50);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
