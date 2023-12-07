@@ -273,8 +273,11 @@ function CustomTable(props) {
                             className={classes.tableCellClass}
                             style={{
                               width: "auto", color: !disabledTable ?
-                                (((headName === "brokerName" && active === "True") || (headName === "bankrollPercent" && value > 20)) ? "limeGreen" :
-                                  ((headName === "brokerName" && active === "False") || (headName === "bankrollPercent" && value < 20)) ? "red" : "black") :
+                                (
+                                  ((headName === "brokerName" && active === "True") || (headName === "bankrollPercent" && value >= 60)) ? "purple" :
+                                    ((headName === "brokerName" && active === "True") || (headName === "bankrollPercent" && value >= 20 && value > 60)) ? "limeGreen" :
+                                      ((headName === "brokerName" && active === "False") || (headName === "bankrollPercent" && value < 20)) ? "red" : "black"
+                                ) :
                                 'rgba(0, 0, 0, 0.5)'
                             }}
                           // size="small"
