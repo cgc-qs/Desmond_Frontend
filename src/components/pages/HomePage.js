@@ -113,7 +113,7 @@ export default function HomePage() {
         // { id: "totalSwap", numeric: false, label: "totalSwap" },
         // { id: "longSwap", numeric: false, label: "longSwap" },
         //{ id: "shortSwap", numeric: false, label: "shortSwap" },
-        { id: "_alertChecked", numeric: false, label: "alert" },
+        // { id: "_alertChecked", numeric: false, label: "alert" },
         { id: "edit", numeric: false, label: " " },
         { id: "delete", numeric: false, label: " " }
 
